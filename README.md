@@ -27,7 +27,7 @@ chat from [LuckPerms](https://github.com/golem-mc/perms).
 
 ## Not yet
 
-- Transient permissions in the fallback: waits on [golem-mc/golem#154](https://github.com/golem-mc/golem/issues/154)
+- Transient permissions in the fallback ([#15](https://github.com/golem-mc/vault/issues/15))
 
 ## Configuration
 
