@@ -36,6 +36,7 @@ jobs:
         with:
           build-cache: true
       - run: mise run build
+      - run: mise run dev:check
 
   lint:
     name: Lint
