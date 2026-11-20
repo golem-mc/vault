@@ -11,7 +11,7 @@
     "gomodTidy",
     "gomodUpdateImportPaths"
   ],
-  "platformAutomerge": false,
+  "platformAutomerge": true,
   "packageRules": [
     {
       "description": "Minor, patch and digest updates merge themselves once CI passes; majors wait for a person.",
@@ -59,11 +59,14 @@
       "minimumReleaseAge": "3 days"
     },
     {
-      "description": "golem moves as one update.",
+      "description": "golem-mc modules update together once a day.",
       "matchPackageNames": [
-        "github.com/golem-mc/golem"
+        "github.com/golem-mc/**"
       ],
-      "groupName": "golem"
+      "groupName": "golem-mc modules",
+      "schedule": [
+        "* 0-5 * * *"
+      ]
     }
   ],
   "customManagers": [
