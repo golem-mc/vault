@@ -1,6 +1,10 @@
 package vault
 
-import "github.com/golem-mc/golem/plugin"
+import (
+	"reflect"
+
+	"github.com/golem-mc/golem/plugin"
+)
 
 // Service priorities, Bukkit's ServicePriority on golem's scale, where the
 // highest-priority provider of a service is the one plugins get. The Vault
@@ -36,8 +40,28 @@ func ProvideChat(s plugin.Server, c Chat, priority int) {
 func LookupEconomy(s plugin.Server) (Economy, bool) { return plugin.Service[Economy](s) }
 
 // LookupPermission answers the highest-priority Permission any plugin
-// provides.
+// provides; with the Vault plugin installed there is always one.
 func LookupPermission(s plugin.Server) (Permission, bool) { return plugin.Service[Permission](s) }
 
 // LookupChat answers the highest-priority Chat any plugin provides.
 func LookupChat(s plugin.Server) (Chat, bool) { return plugin.Service[Chat](s) }
+
+// Economies answers every Economy the plugins provide, highest priority
+// first. Vault: ServicesManager.getRegistrations(Economy.class)
+func Economies(s plugin.Server) []Economy { return providers[Economy](s) }
+
+// Permissions answers every Permission the plugins provide, highest
+// priority first.
+func Permissions(s plugin.Server) []Permission { return providers[Permission](s) }
+
+// Chats answers every Chat the plugins provide, highest priority first.
+func Chats(s plugin.Server) []Chat { return providers[Chat](s) }
+
+func providers[S any](s plugin.Server) []S {
+	ps := s.Services().Providers(reflect.TypeFor[S]())
+	out := make([]S, len(ps))
+	for i, p := range ps {
+		out[i] = p.Impl.(S)
+	}
+	return out
+}
