@@ -27,8 +27,7 @@ chat from [LuckPerms](https://github.com/golem-mc/perms).
 
 ## Not yet
 
-- Transient permissions in the fallback, until golem has permission attachments
-- Vault's update checker and metrics
+- Transient permissions in the fallback: waits on [golem-mc/golem#154](https://github.com/golem-mc/golem/issues/154)
 
 ## Configuration
 
