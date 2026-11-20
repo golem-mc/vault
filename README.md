@@ -57,9 +57,10 @@ Neither command has aliases.
 
 With no permission plugin installed, Vault's "SuperPerms" answers permission checks from
 what golem itself grants a player (`vault.admin` for operators), so plugins that only
-check permissions keep working. It cannot add or remove permissions, groups or prefixes;
-a plugin that tries is told the operation is unsupported. Install
-[LuckPerms](https://github.com/golem-mc/perms) for that.
+check permissions keep working. It can grant and revoke transient permissions for
+online players; they last until the player leaves. Permanent permissions, groups and
+prefixes cannot be changed; a plugin that tries is told the operation is unsupported.
+Install [LuckPerms](https://github.com/golem-mc/perms) for those.
 
 ## Configuration
 

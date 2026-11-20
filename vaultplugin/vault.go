@@ -23,7 +23,7 @@ func (*Vault) Enable(s plugin.Server) error {
 		Description: "Notifies the player when vault is in need of an update.",
 		Default:     plugin.PermissionDefault{OpLevel: 1}})
 	// vault: Vault.loadPermission registers SuperPerms at ServicePriority.Lowest.
-	vault.ProvidePermission(s, superPerms{s}, vault.PriorityLowest)
+	vault.ProvidePermission(s, newSuperPerms(s), vault.PriorityLowest)
 	return registerCommands(s)
 }
 

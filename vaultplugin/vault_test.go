@@ -44,6 +44,29 @@ func TestInfoListsTheHookedProviders(t *testing.T) {
 	}
 }
 
+func TestSuperPermsTransientPermissions(t *testing.T) {
+	srv := plugintest.Start(t)
+	bob := srv.Join("Bob")
+	id := bob.Handle().UUID()
+	perm, _ := vault.LookupPermission(srv.Host())
+	const node = "vault.transient"
+	if perm.PlayerHas(nil, id, node) {
+		t.Fatal("node set before it was added")
+	}
+	if err := perm.PlayerAddTransient(nil, id, node); err != nil {
+		t.Fatalf("PlayerAddTransient: %v", err)
+	}
+	if !perm.PlayerHas(nil, id, node) {
+		t.Fatal("transient node not granted")
+	}
+	if err := perm.PlayerRemoveTransient(nil, id, node); err != nil {
+		t.Fatalf("PlayerRemoveTransient: %v", err)
+	}
+	if perm.PlayerHas(nil, id, node) {
+		t.Fatal("transient node still granted after removal")
+	}
+}
+
 func TestConvertCopiesBalancesIntoTheOtherEconomy(t *testing.T) {
 	old, fresh := newEconomy("Old Eco"), newEconomy("New")
 	regs := append(plugin.Registered(),

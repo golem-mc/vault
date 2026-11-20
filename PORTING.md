@@ -44,8 +44,9 @@ the test: a provider and a consumer that only knows package `vault`.
 - **No hooks for other plugins.** Vault ships adapters for dozens of economy and
   permission plugins that predate it. Here each plugin provides the service itself, as
   Essentials and LuckPerms do; there is nothing to adapt.
-- **Transient permissions in the fallback.** golem has no permission attachments, so
-  SuperPerms answers `errors.ErrUnsupported` to `PlayerAddTransient`.
+- **Transient permissions in the fallback.** They live on one permission attachment per
+  online player, so they end when the player leaves; for an offline player
+  `PlayerAddTransient` answers `errors.ErrUnsupported`.
 - **No update checker or metrics.**
 - **Packages.** The API is package `github.com/golem-mc/vault` (`Economy`, `Permission`,
   `Chat`); importing it registers nothing, so any plugin can depend on it. The plugin is
