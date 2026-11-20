@@ -66,14 +66,6 @@ The Vault plugin is optional: a plugin that uses Vault's services finds them as 
 an economy or permission plugin that provides them is installed. Install it for
 `/vault-info`, `/vault-convert` and the fallback permission service.
 
-### As a ready-built server
-
-```bash
-git clone https://github.com/golem-mc/vault.git
-cd vault
-mise run dev        # or: go run ./cmd/server
-```
-
 ## For plugin authors
 
 Add the module (`go get github.com/golem-mc/vault`) and import the package `vault`. Look a

@@ -7,7 +7,7 @@ Everything is pinned in `mise.toml`. With [mise](https://mise.jdx.dev/) installe
 ```bash
 mise install
 mise run build
-mise run dev        # a golem server with Vault built in
+mise run dev        # a golem server with this checkout built in, via golem-launcher
 ```
 
 ## Before you open a pull request

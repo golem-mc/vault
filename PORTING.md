@@ -15,7 +15,6 @@ sources are checked out, ignored by git, in `Vault/` and `VaultAPI/` for referen
 | `chat.go` | `Chat`, `PlayerInfoOr` / `GroupInfoOr` | `chat/Chat` |
 | `services.go` | `Provide*`, `Lookup*`, the provider lists, `Priority*` | Bukkit's `ServicesManager`, `ServicePriority` |
 | `vaultplugin/` | The `vault` plugin: commands, the SuperPerms fallback | `Vault.java`, `Permission_SuperPerms` |
-| `cmd/server/` | A server binary with Vault built in | — |
 
 ## How the API maps
 

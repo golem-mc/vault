@@ -17,3 +17,6 @@ banned-ips.json
 banned-players.json
 usercache.json
 help.yml
+
+# Development server (mise run dev)
+dev/run/

@@ -54,8 +54,31 @@ run = "go fix -diff ./..."
 
 [tasks.check]
 description = "Everything a PR must pass: build, test, lint, format, fix and tidy checks"
-depends = ["build", "test", "lint", "fmt:check", "fix:check", "tidy:check"]
+depends = ["build", "test", "lint", "fmt:check", "fix:check", "tidy:check", "dev:check"]
+
+[tasks."dev:config"]
+description = "Write dev/run/launcher.json (untracked), pinning the server to the golem version in go.mod"
+run = '''
+mkdir -p dev/run
+version=$(go list -m github.com/golem-mc/golem | cut -d' ' -f2)
+cat > dev/run/launcher.json <<EOF
+{
+  "server": "$version",
+  "plugins": ["../../vaultplugin"],
+  "updateCheck": false
+}
+EOF
+'''
+
+[tasks."dev:check"]
+description = "Prove the plugin links into a server through golem-launcher"
+depends = ["dev:config"]
+run = "go tool launcher -config dev/run/launcher.json check"
 
 [tasks.dev]
-description = "Run a golem server with Vault built in"
-run = "go run ./cmd/server"
+description = "Run a golem server with this checkout of Vault built in, in dev/run"
+depends = ["dev:config"]
+run = '''
+cd dev/run
+go tool launcher -config launcher.json
+'''
