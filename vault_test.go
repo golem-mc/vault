@@ -71,6 +71,12 @@ func TestHigherPriorityProviderWins(t *testing.T) {
 	if eco, ok := vault.LookupEconomy(srv.Host()); !ok || eco.Name() != "High" {
 		t.Fatalf("LookupEconomy answered %v, want the PriorityHigh one", eco)
 	}
+	if all := vault.Economies(srv.Host()); len(all) != 2 || all[0].Name() != "High" || all[1].Name() != "Low" {
+		t.Fatalf("Economies answered %v, want High then Low", all)
+	}
+	if all := vault.Chats(srv.Host()); len(all) != 0 {
+		t.Fatalf("Chats answered %v, want none", all)
+	}
 	if _, ok := vault.LookupChat(srv.Host()); ok {
 		t.Fatal("LookupChat found a chat nobody provides")
 	}
