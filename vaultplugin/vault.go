@@ -1,5 +1,5 @@
-// Package vaultplugin is the Vault plugin, registered as "vault": /vault-info
-// and the fallback Permission service over golem's own
+// Package vaultplugin is the Vault plugin, registered as "vault": /vault-info,
+// /vault-convert and the fallback Permission service over golem's own
 // permission checks. Vault: net.milkbowl.vault.Vault
 package vaultplugin
 

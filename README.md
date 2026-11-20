@@ -12,7 +12,7 @@ It has two parts:
 - **The API**, package `github.com/golem-mc/vault`: the `Economy`, `Permission` and `Chat`
   interfaces. Importing it registers nothing, so any plugin can depend on it.
 - **The Vault plugin**, package `github.com/golem-mc/vault/vaultplugin`, registered as
-  `vault`: `/vault-info` and a fallback permission service.
+  `vault`: `/vault-info`, `/vault-convert` and a fallback permission service.
 
 ## What's included
 
@@ -26,8 +26,9 @@ It has two parts:
 - **Chat** (`vault.Chat`): player and group prefixes, suffixes and info nodes (meta), read
   as strings or, with `vault.PlayerInfoOr` / `vault.GroupInfoOr`, as ints, floats and bools.
 - **`/vault-info`** shows the economy, permission and chat service in use and every
-  provider of each. It needs `vault.admin` (operators by default) and prints Vault's
-  messages.
+  provider of each; **`/vault-convert <economy1> <economy2>`** copies every player's
+  balance from one economy plugin into another that has no account for them yet. Both
+  need `vault.admin` (operators by default) and print Vault's messages.
 - **Fallback permissions**: with no permission plugin, the Vault plugin provides a
   `vault.Permission` ("SuperPerms") over golem's own permission checks, as Vault falls
   back to Bukkit's SuperPerms, so plugins that only check permissions keep working.
@@ -42,9 +43,6 @@ It has two parts:
 
 ## Not yet
 
-- **`/vault-convert`**, which copies every player's balance from one economy plugin into
-  another: it waits for golem to list the players who have played
-  (golem-mc/golem#82).
 - **Vault's own hooks for other plugins.** On Bukkit, Vault ships adapters for dozens of
   economy and permission plugins that predate it. Here each plugin provides the service
   itself, as Essentials and LuckPerms do; there is nothing to adapt.
@@ -66,7 +64,7 @@ Add the plugin with
 
 The Vault plugin is optional: a plugin that uses Vault's services finds them as soon as
 an economy or permission plugin that provides them is installed. Install it for
-`/vault-info` and the fallback permission service.
+`/vault-info`, `/vault-convert` and the fallback permission service.
 
 ### As a ready-built server
 
