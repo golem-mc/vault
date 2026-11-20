@@ -58,7 +58,7 @@ Add the plugin with
 [`golem-launcher`](https://github.com/golem-mc/golem#installing-plugins):
 
 ```bash
-./golem-launcher plugin add github.com/golem-mc/vault
+./golem-launcher plugin add github.com/golem-mc/vault/vaultplugin
 ./golem-launcher
 ```
 
