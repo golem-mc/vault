@@ -4,8 +4,10 @@ import (
 	"errors"
 	"slices"
 	"strings"
+	"sync"
 	"testing"
 
+	"github.com/golem-mc/golem/plugin"
 	"github.com/golem-mc/golem/plugintest"
 	"github.com/golem-mc/vault"
 	_ "github.com/golem-mc/vault/vaultplugin"
@@ -40,4 +42,113 @@ func TestInfoListsTheHookedProviders(t *testing.T) {
 	if err := perm.PlayerAdd(nil, bob.Handle().UUID(), "vault.admin"); !errors.Is(err, errors.ErrUnsupported) {
 		t.Fatalf("SuperPerms PlayerAdd: %v", err)
 	}
+}
+
+func TestConvertCopiesBalancesIntoTheOtherEconomy(t *testing.T) {
+	old, fresh := newEconomy("Old Eco"), newEconomy("New")
+	regs := append(plugin.Registered(),
+		plugin.Registration{Name: "old", Plugin: provides{old, vault.PriorityHigh}},
+		plugin.Registration{Name: "fresh", Plugin: provides{fresh, vault.PriorityNormal}})
+	srv := plugintest.Start(t, plugintest.WithPlugins(regs...), plugintest.Ops("Alice"))
+	alice := srv.Join("Alice")
+	bob := srv.Join("Bob")
+	bobID := bob.Handle().UUID()
+	aliceID := alice.Handle().UUID()
+	old.CreateAccount(bobID, "Bob")
+	old.Deposit(bobID, 42.5)
+	old.CreateAccount(aliceID, "Alice")
+	old.Deposit(aliceID, 7)
+	fresh.CreateAccount(aliceID, "Alice")
+	bob.Disconnect()
+	alice.Messages(2) // Bob's join and leave messages
+
+	alice.Run("/vault-info")
+	if got := alice.Messages(2); len(got) != 4 || got[1] != "[Vault] Economy: Old Eco [Old Eco, New]" {
+		t.Fatalf("/vault-info: %q", got)
+	}
+
+	alice.Run("/vault-convert OldEco")
+	if got := alice.Messages(2); len(got) != 1 || !strings.HasPrefix(got[0], "You must specify only the economy") {
+		t.Fatalf("/vault-convert with one name: %q", got)
+	}
+	alice.Run("/vault-convert Nope New")
+	if got := alice.Messages(2); !slices.Equal(got, []string{"Could not find Nope loaded on the server, check your spelling.", "Valid economies are: OldEco, New"}) {
+		t.Fatalf("/vault-convert with an unknown name: %q", got)
+	}
+
+	alice.Run("/vault-convert oldeco new")
+	want := []string{"This may take some time to convert, expect server lag.", "Converson complete, please verify the data before using it."}
+	if got := alice.Messages(2); !slices.Equal(got, want) {
+		t.Fatalf("/vault-convert: %q", got)
+	}
+	if got := fresh.Balance(bobID); got != 42.5 {
+		t.Fatalf("Bob's converted balance is %v, want 42.5", got)
+	}
+	if got := fresh.Balance(aliceID); got != 0 {
+		t.Fatalf("Alice already had an account in New, yet it holds %v", got)
+	}
+}
+
+type provides struct {
+	e        *economy
+	priority int
+}
+
+func (p provides) Enable(s plugin.Server) error {
+	vault.ProvideEconomy(s, p.e, p.priority)
+	return nil
+}
+
+func (provides) Disable() {}
+
+type economy struct {
+	name     string
+	mu       sync.Mutex
+	balances map[plugin.UUID]float64
+}
+
+func newEconomy(name string) *economy {
+	return &economy{name: name, balances: map[plugin.UUID]float64{}}
+}
+
+func (e *economy) Name() string                 { return e.name }
+func (e *economy) FractionalDigits() int        { return -1 }
+func (e *economy) Format(amount float64) string { return "" }
+func (e *economy) CurrencyNameSingular() string { return "" }
+func (e *economy) CurrencyNamePlural() string   { return "" }
+
+func (e *economy) HasAccount(id plugin.UUID) bool {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	_, ok := e.balances[id]
+	return ok
+}
+
+func (e *economy) CreateAccount(id plugin.UUID, _ string) bool {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	if _, ok := e.balances[id]; ok {
+		return false
+	}
+	e.balances[id] = 0
+	return true
+}
+
+func (e *economy) Balance(id plugin.UUID) float64 {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	return e.balances[id]
+}
+
+func (e *economy) Has(id plugin.UUID, amount float64) bool { return e.Balance(id) >= amount }
+
+func (e *economy) Withdraw(id plugin.UUID, amount float64) vault.Response {
+	return e.Deposit(id, -amount)
+}
+
+func (e *economy) Deposit(id plugin.UUID, amount float64) vault.Response {
+	e.mu.Lock()
+	defer e.mu.Unlock()
+	e.balances[id] += amount
+	return vault.Response{Amount: amount, Balance: e.balances[id]}
 }

@@ -13,6 +13,6 @@
 //	}
 //
 // Permission and Chat work the same way, through ProvidePermission, LookupPermission,
-// ProvideChat and LookupChat. The Vault plugin, package vaultplugin, adds /vault-info and a
-// fallback Permission over golem's own permission checks.
+// ProvideChat and LookupChat. The Vault plugin, package vaultplugin, adds /vault-info,
+// /vault-convert and a fallback Permission over golem's own permission checks.
 package vault
