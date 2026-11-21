@@ -27,14 +27,14 @@
       "automergeStrategy": "squash"
     },
     {
-      "description": "Indirect Go modules are updated too, not only direct ones.",
+      "description": "Indirect Go modules follow golem's daily digest bump: golem-launcher refuses a plugin that raises a module the server uses.",
       "matchManagers": [
         "gomod"
       ],
       "matchDepTypes": [
         "indirect"
       ],
-      "enabled": true
+      "enabled": false
     },
     {
       "description": "The go directive in go.mod and the toolchain in mise.toml move together.",
