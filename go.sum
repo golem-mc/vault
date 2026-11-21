@@ -1,5 +1,5 @@
-github.com/golem-mc/golem v0.0.0-20261120160404-c0c9983fdd00 h1:jc0REmaNI9xmHNfGImzU/or1HMkVxra/23n6KA0HV4M=
-github.com/golem-mc/golem v0.0.0-20261120160404-c0c9983fdd00/go.mod h1:oFlU6ijSdw7lNo/gxfCuANfYyklqkw5a9qGaUrbLcms=
+github.com/golem-mc/golem v0.0.0-20261120233601-465ac52ea466 h1:u1LihFszk7U03o2fRW85bN56xJL9rHDRvtnTIKy9eOY=
+github.com/golem-mc/golem v0.0.0-20261120233601-465ac52ea466/go.mod h1:oFlU6ijSdw7lNo/gxfCuANfYyklqkw5a9qGaUrbLcms=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=
 github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/klauspost/compress v1.20.4 h1:dD0v/bvxtjCBqQu6sx1TNWkalEY5lNTIe+HY9w8TeNI=

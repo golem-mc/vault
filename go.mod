@@ -2,7 +2,7 @@ module github.com/golem-mc/vault
 
 go 1.27.4
 
-require github.com/golem-mc/golem v0.0.0-20261120160404-c0c9983fdd00
+require github.com/golem-mc/golem v0.0.0-20261120233601-465ac52ea466
 
 require (
 	github.com/google/uuid v1.6.0 // indirect
