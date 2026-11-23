@@ -10,8 +10,50 @@ import (
 	"github.com/golem-mc/golem/plugin"
 	"github.com/golem-mc/golem/plugintest"
 	"github.com/golem-mc/vault"
-	_ "github.com/golem-mc/vault/vaultplugin"
+	"github.com/golem-mc/vault/vaultplugin"
 )
+
+func TestInfoShowsOneVersionPrefix(t *testing.T) {
+	for _, version := range []string{"v0.1.0", "0.1.0"} {
+		t.Run(version, func(t *testing.T) {
+			srv := plugintest.Start(t, plugintest.Ops("Alice"), plugintest.WithPlugins(
+				plugin.Registration{Name: "vault", Plugin: &versionedVault{version: version}},
+			))
+			alice := srv.Join("Alice")
+
+			alice.Run("/vault-info")
+			const want = "[Vault] Vault v0.1.0 Information"
+			if got := alice.Messages(2); len(got) == 0 || got[0] != want {
+				t.Fatalf("/vault-info: got %q, want header %q", got, want)
+			}
+		})
+	}
+}
+
+type versionedVault struct {
+	vaultplugin.Vault
+	version string
+}
+
+func (v *versionedVault) Enable(s plugin.Server) error {
+	return v.Vault.Enable(versionedPluginServer{Server: s, version: v.version})
+}
+
+// versionedPluginServer supplies the version that golem normally reads from build information.
+type versionedPluginServer struct {
+	plugin.Server
+	version string
+}
+
+func (s versionedPluginServer) Plugins() []plugin.Info {
+	plugins := s.Server.Plugins()
+	for i := range plugins {
+		if plugins[i].Name == s.Name() {
+			plugins[i].Version = s.version
+		}
+	}
+	return plugins
+}
 
 func TestInfoListsTheHookedProviders(t *testing.T) {
 	srv := plugintest.Start(t, plugintest.Ops("Alice"))
