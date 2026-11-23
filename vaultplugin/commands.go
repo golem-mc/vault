@@ -43,7 +43,7 @@ func infoCommand(s plugin.Server, to plugin.CommandSender) {
 			version = p.Version
 		}
 	}
-	say(to, "[Vault] Vault v%s Information", version)
+	say(to, "[Vault] Vault v%s Information", strings.TrimPrefix(version, "v"))
 	say(to, "[Vault] Economy: %s", serviceLine(vault.Economies(s)))
 	say(to, "[Vault] Permission: %s", serviceLine(vault.Permissions(s)))
 	say(to, "[Vault] Chat: %s", serviceLine(vault.Chats(s)))
