@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.1](https://github.com/golem-mc/vault/compare/v0.1.0...v0.1.1) (2026-11-26)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/golem-mc/golem to v0.2.0 ([#29](https://github.com/golem-mc/vault/issues/29)) ([ce0f595](https://github.com/golem-mc/vault/commit/ce0f595cf5185d461b1941d4286ad48f7b6ffcec))
+* show one version prefix in /vault-info ([#27](https://github.com/golem-mc/vault/issues/27)) ([da20c3b](https://github.com/golem-mc/vault/commit/da20c3b6322703ae78140b3db2f7ca7b4621ca2c))
+
 ## 0.1.0 (2026-11-21)
 
 
